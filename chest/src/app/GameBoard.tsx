@@ -64,18 +64,19 @@ function GameBoard({}: Props) {
           return (
             <div key={i} className="flex">
               {row.map((cell, ii) => {
+                const color = (i + ii) % 2 == 0 ? "bg-white" : "bg-zinc-400";
                 return (
                   <div
                     onClick={() => {
                       handleClick([i, ii]);
                     }}
                     key={`${ii}${i}`}
-                    className={`flex-1 border border-black h-20 w-20 flex items-center justify-center ${
+                    className={`flex-1 border  border-black h-20 w-20 flex items-center justify-center ${
                       startSelected &&
                       startSelected[0] == i &&
                       startSelected[1] == ii
                         ? "bg-green-500"
-                        : ""
+                        : color
                     } ${
                       endSelected && endSelected[0] == i && endSelected[1] == ii
                         ? "bg-red-500"
