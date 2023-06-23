@@ -88,6 +88,12 @@ class Game:
     def __init__(self):
         self.chess_board = ChessBoard()
         self.turn = "White"
+        self.selPiece = {
+            "r": "rook",
+            "k": "knight",
+            "q": "queen",
+            "b": "bishop",
+        }
 
     def move(self, start, end):
         piece = self.chess_board.board[start[0]][start[1]].piece
@@ -134,6 +140,22 @@ class Game:
         else:
             print("Invalid move")
             return
+        
+        if piece.piece_type == "pawn" and piece.color == "black" and end[0] == 7:
+            print("Enter piece type: r: rook, k: knight, b: bishop, q: queen")
+            res = input()
+            while res not in self.selPiece:
+                print("Invalid piece type")
+                res = input()
+            piece.piece_type = self.selPiece[res]
+        elif piece.piece_type == "pawn" and piece.color == "white" and end[0] == 0:
+            print("Enter piece type: r: rook, k: knight, b: bishop, q: queen")
+            res = input()
+            while res not in self.selPiece:
+                print("Invalid piece type")
+                res = input()
+            piece.piece_type = self.selPiece[res]   
+            
         self.turn = "Black" if self.turn == "White" else "White"
              
              
