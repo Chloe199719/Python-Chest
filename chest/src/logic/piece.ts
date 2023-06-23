@@ -10,16 +10,30 @@ export class Piece {
     this.color = color;
     this.type = type;
   }
-  isValidMove(start: number[], end: number[]) {
+  isValidMove(start: number[], end: number[], IsCapturing?: boolean) {
     const dx = end[0] - start[0];
     const dy = end[1] - start[1];
 
     switch (this.type) {
       case "pawn":
         if (this.color === "white") {
-          return (dx == -1 && dy == 0) || (Math.abs(dy) == 1 && dx == -1);
+          // Normal move
+          if (dx == -1 && dy == 0) return true;
+          // Double move from start position
+          if (start[0] === 6 && dx == -2 && dy === 0) return true;
+          // Capture
+          if (IsCapturing) {
+            if (dx == -1 && Math.abs(dy) == 1) return true;
+          }
         } else {
-          return (dx == 1 && dy == 0) || (Math.abs(dy) == 1 && dx == 1);
+          // Normal move
+          if (dx == 1 && dy == 0) return true;
+          // Double move from start position
+          if (start[0] === 1 && dx == 2 && dy === 0) return true;
+          // Capture
+          if (IsCapturing) {
+            if (dx == 1 && Math.abs(dy) == 1) return true;
+          }
         }
 
       case "knight":
@@ -109,7 +123,7 @@ export class Game {
         if (endCell.piece) {
           if (
             this.kill(startCell.piece, endCell.piece) &&
-            startCell.piece.isValidMove(start, end)
+            startCell.piece.isValidMove(start, end, true)
           ) {
             endCell.piece = startCell.piece;
             startCell.piece = null;
