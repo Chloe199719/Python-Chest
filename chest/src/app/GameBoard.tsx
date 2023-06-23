@@ -2,7 +2,7 @@
 import { Game } from "@/logic/piece";
 import { use, useEffect, useState } from "react";
 import Image from "next/image";
-import { stat } from "fs";
+
 type Props = {};
 function GameBoard({}: Props) {
   const [game, setGame] = useState<Game>(new Game());
