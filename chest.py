@@ -94,13 +94,36 @@ class Game:
             "q": "queen",
             "b": "bishop",
         }
-
+    def is_path_clear(self, start, end):
+            dx = end[0] - start[0]
+            dy = end[1] - start[1]
+            
+            x_dir = 0
+            y_dir = 0
+            
+            if dx != 0:
+                x_dir = 1 if dx > 0 else -1
+            if dy != 0:
+                y_dir = 1 if dy > 0 else -1
+            
+            x, y = start[0] + x_dir, start[1] + y_dir
+            while x != end[0] or y != end[1]:
+                if self.chess_board.board[x][y].piece is not None:
+                    return False
+                x += x_dir
+                y += y_dir
+            return True
+    
     def move(self, start, end):
         piece = self.chess_board.board[start[0]][start[1]].piece
         print(piece)
         if piece.color.lower() != self.turn.lower():
             print("Invalid move1")
             return
+        if piece.piece_type in ["rook", "bishop", "queen"]:
+            if not self.is_path_clear(start, end):
+                print("Cannot move through other pieces")
+                return
         if piece.piece_type == "pawn" and self.chess_board.board[end[0]][end[1]].piece != None and self.chess_board.board[end[0]][end[1]].piece.kill(piece):
           
             if piece.color == "black":
