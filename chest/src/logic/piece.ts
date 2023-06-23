@@ -111,7 +111,7 @@ export class Game {
     this.gameIsOver = false;
   }
   move(start: number[], end: number[]) {
-    if (this.gameIsOver) {
+    if (this.gameIsOver || this.isPawnPromoting) {
       return false;
     }
     const startCell = this.board.gameBoard[start[0]][start[1]];
@@ -130,7 +130,7 @@ export class Game {
             startCell.piece = null;
             this.turn = this.turn === "white" ? "black" : "white";
             if (endCell.piece.type === "pawn") {
-                this.pawnPromotion(endCell, end);
+              this.pawnPromotion(endCell, end);
             }
             return true;
           }
@@ -139,6 +139,9 @@ export class Game {
             endCell.piece = startCell.piece;
             startCell.piece = null;
             this.turn = this.turn === "white" ? "black" : "white";
+            if (endCell.piece.type === "pawn") {
+              this.pawnPromotion(endCell, end);
+            }
             return true;
           }
         }
@@ -158,7 +161,7 @@ export class Game {
       }
     }
   }
-  promotePawn(type: Piece["type"], ) {
+  promotePawn(type: Piece["type"]) {
     if (this.isPawnPromoting) {
       this.isPawnPromoting.type = type;
       this.isPawnPromoting = false;
