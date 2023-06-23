@@ -18,33 +18,35 @@ export class Piece {
       case "pawn":
         if (this.color === "white") {
           // Normal move
-          if (dx == -1 && dy == 0) {
-            console.log("normal move");
-            return true;
-          }
-          // Double move from start position
-          else if (start[0] === 6 && dx == -2 && dy === 0) {
-            console.log("double move");
-            return true;
-          }
-
-          // Capture
-          else if (IsCapturing) {
+          if (!IsCapturing) {
+            if (dx == -1 && dy == 0) {
+              console.log("normal move");
+              return true;
+            }
+            // Double move from start position
+            else if (start[0] === 6 && dx == -2 && dy === 0) {
+              console.log("double move");
+              return true;
+            }
+          } else {
             if (dx == -1 && Math.abs(dy) == 1) {
               console.log("capture");
               return true;
             }
           }
+
+          // Capture
         } else {
           // Normal move
-          if (dx == 1 && dy == 0) return true;
-          // Double move from start position
-          if (start[0] === 1 && dx == 2 && dy === 0) return true;
-          // Capture
-          if (IsCapturing) {
+          if (!IsCapturing) {
+            if (dx == 1 && dy == 0) return true;
+            // Double move from start position
+            if (start[0] === 1 && dx == 2 && dy === 0) return true;
+            // Capture
+          } else {
             if (dx == 1 && Math.abs(dy) == 1) return true;
+            return false;
           }
-          return false;
         }
         return false;
 
