@@ -13,17 +13,27 @@ export class Piece {
   isValidMove(start: number[], end: number[], IsCapturing?: boolean) {
     const dx = end[0] - start[0];
     const dy = end[1] - start[1];
-
+    console.log(dx, dy);
     switch (this.type) {
       case "pawn":
         if (this.color === "white") {
           // Normal move
-          if (dx == -1 && dy == 0) return true;
+          if (dx == -1 && dy == 0) {
+            console.log("normal move");
+            return true;
+          }
           // Double move from start position
-          if (start[0] === 6 && dx == -2 && dy === 0) return true;
+          else if (start[0] === 6 && dx == -2 && dy === 0) {
+            console.log("double move");
+            return true;
+          }
+
           // Capture
-          if (IsCapturing) {
-            if (dx == -1 && Math.abs(dy) == 1) return true;
+          else if (IsCapturing) {
+            if (dx == -1 && Math.abs(dy) == 1) {
+              console.log("capture");
+              return true;
+            }
           }
         } else {
           // Normal move
@@ -34,7 +44,9 @@ export class Piece {
           if (IsCapturing) {
             if (dx == 1 && Math.abs(dy) == 1) return true;
           }
+          return false;
         }
+        return false;
 
       case "knight":
         return (
@@ -54,19 +66,18 @@ export class Piece {
       case "king":
         return Math.max(Math.abs(dx), Math.abs(dy)) === 1;
     }
-    return false;
   }
-  kill(Piece: Piece) {
-    if (this.color !== Piece.color) {
-      if (this.type === "king") {
-        return {
-          winner: Piece.color, // Change to call a function that ends the game
-        };
-      }
-      return true;
-    }
-    return false;
-  }
+  //   kill(Piece: Piece) {
+  //     if (this.color !== Piece.color) {
+  //       if (this.type === "king") {
+  //         return {
+  //           winner: Piece.color, // Change to call a function that ends the game
+  //         };
+  //       }
+  //       return true;
+  //     }
+  //     return false;
+  //   }
 }
 
 export class Board {
