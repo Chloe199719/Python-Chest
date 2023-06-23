@@ -10,7 +10,10 @@ function GameBoard({}: Props) {
     null
   );
   const [endSelected, setEndSelected] = useState<[number, number] | null>(null);
-
+  const possiblePromotions = ["queen", "knight", "rook", "bishop"];
+  const [selectedPromotion, setSelectedPromotion] = useState<
+    "queen" | "knight" | "rook" | "bishop" | null
+  >(null);
   function handleClick(arr: [number, number]) {
     if (startSelected && endSelected) {
       setStartSelected(null);
@@ -38,7 +41,14 @@ function GameBoard({}: Props) {
       setGame(copy);
     }
   }, [startSelected, endSelected, game]);
-
+  useEffect(() => {
+    if (selectedPromotion) {
+      const copy = game;
+      copy.promotePawn(selectedPromotion);
+      setGame(copy);
+      setSelectedPromotion(null);
+    }
+  }, [game, selectedPromotion]);
   return (
     <div className="flex flex-col items-center gap-3">
       {game.gameIsOver ? (
@@ -89,7 +99,33 @@ function GameBoard({}: Props) {
           );
         })}
       </div>
-
+      {game.isPawnPromoting !== false ? (
+        <div className="flex gap-3">
+          {possiblePromotions.map((promotion, i) => {
+            return (
+              <div
+                onClick={() => {
+                  setSelectedPromotion(
+                    promotion as "queen" | "knight" | "rook" | "bishop"
+                  );
+                }}
+                key={i}
+                className="border border-black"
+              >
+                <Image
+                  width={60}
+                  height={60}
+                  /*@ts-expect-error */
+                  src={`/${promotion}_${game.isPawnPromoting.color}.png`}
+                  alt="stuff"
+                />
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        ""
+      )}
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={() => {

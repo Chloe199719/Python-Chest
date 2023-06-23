@@ -104,6 +104,7 @@ export class Game {
   board: Board;
   turn: "white" | "black";
   gameIsOver: false | { winner: "white" | "black" };
+  isPawnPromoting: false | Piece = false;
   constructor() {
     this.board = new Board();
     this.turn = "white";
@@ -128,6 +129,9 @@ export class Game {
             endCell.piece = startCell.piece;
             startCell.piece = null;
             this.turn = this.turn === "white" ? "black" : "white";
+            if (endCell.piece.type === "pawn") {
+                this.pawnPromotion(endCell, end);
+            }
             return true;
           }
         } else {
@@ -141,6 +145,24 @@ export class Game {
       }
     }
     return false;
+  }
+  pawnPromotion(start: Cell, end: number[]) {
+    if (start.piece === null) {
+      return false;
+    }
+    if (start.piece.type === "pawn") {
+      if (start.piece.color === "white" && end[0] === 0) {
+        this.isPawnPromoting = start.piece;
+      } else if (start.piece.color === "black" && end[0] === 7) {
+        this.isPawnPromoting = start.piece;
+      }
+    }
+  }
+  promotePawn(type: Piece["type"], ) {
+    if (this.isPawnPromoting) {
+      this.isPawnPromoting.type = type;
+      this.isPawnPromoting = false;
+    }
   }
   kill(PieceStart: Piece, PieceEnd: Piece) {
     if (PieceStart.color !== PieceEnd.color) {
